@@ -192,7 +192,7 @@ class Bb extends AbstractRemessa implements RemessaContract
         $this->add(36, 36, CalculoDV::bbContaCorrente($this->getConta()));
         $this->add(37, 37, '');
         $this->add(38, 57, Util::formatCnab('X', $this->nossoNumero($boleto), 20));
-        $this->add(58, 58, '1'); //'1' = Cobrança Simples
+        $this->add(58, 58, $this->getCarteira() == 17 ? '7' : '1'); //'1' = Cobrança Simples
         $this->add(59, 59, '');
         $this->add(60, 60, '');
         $this->add(61, 61, '');
@@ -206,7 +206,7 @@ class Bb extends AbstractRemessa implements RemessaContract
         $this->add(109, 109, Util::formatCnab('9', $boleto->getAceite(), 1));
         $this->add(110, 117, $boleto->getDataDocumento()->format('dmY'));
         $this->add(118, 118, $boleto->getJuros() ? '2' : '3'); //'1' = Valor por Dia, '2' = Taxa Mensal, '3' = Isento
-        $this->add(119, 126, $boleto->getDataVencimento()->format('dmY'));
+        $this->add(119, 126, $boleto->getDataVencimento()->copy()->addDays($boleto->getJurosApos())->format('dmY'));
         $this->add(127, 141, Util::formatCnab('9', $boleto->getJuros(), 15, 2)); //Valor da mora/dia ou Taxa mensal
         $this->add(142, 142, $boleto->getDesconto() > 0 ? '1' : '0'); // Se houver desconto '1' = Valor Fixo Até a Data Informada, Se não houver envia o 0
         $this->add(143, 150, $boleto->getDesconto() > 0 ? $boleto->getDataDesconto()->format('dmY') : '00000000');
