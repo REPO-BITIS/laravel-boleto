@@ -1,6 +1,7 @@
 {
-    "name": "eduardokum/laravel-boleto",
+    "name": "bitis/laravel-boleto",
     "description": "Biblioteca com boletos para o laravel",
+    "type": "library",
     "keywords": [
         "eduardokum",
         "laravel-boleto"
