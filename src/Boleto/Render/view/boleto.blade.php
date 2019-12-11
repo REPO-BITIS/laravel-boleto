@@ -5,7 +5,7 @@
         @php extract($boleto, EXTR_OVERWRITE); @endphp
         @if($mostrar_instrucoes)
             <div class="noprint info">
-                <h2>Instruções de Impressão</h2>
+                <h2><center>Instruções de Impressão</center></h2>
                 <ul>
                     @forelse ($instrucoes_impressao as $instrucao_impressao)
                         <li>{{ $instrucao_impressao }}</li>
@@ -26,9 +26,16 @@
                         </li>
                     @endforelse
                 </ul>
-                <span class="header">Linha Digitável: {{ $linha_digitavel }}</span>
-                <span class="header">Número: {{ $numero }}</span>
-                {!! $valor ? '<span class="header">Valor: R$' . $valor . '</span>' : '' !!}
+                <table class="header">
+                    <thead>
+                        <th><td></td><td></td></th>
+                    </thead>
+                    <tbody>
+                        <tr><td style="padding-right:20px">Linha Digitável:</td><td><b>{{ $linha_digitavel }}</b></td></tr>
+                        <tr><td>Número:</td><td><b>{{ $numero }}</b></td></tr>
+                        {!! $valor ? '<tr><td>Valor:</td><td><b>R$ ' . $valor . '</b></td></tr>' : '' !!}
+                    </tbody>
+                </table>
                 <br>
             </div>
         @endif
