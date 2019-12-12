@@ -80,6 +80,23 @@ class Bradesco  extends AbstractBoleto implements BoletoContract
         'O'   => '99', //Outros,
     ];
     /**
+     * Espécie do documento, coódigo para remessa Cnab 400
+     *
+     * @var string
+     */
+    protected $especiesCodigo400 = [
+        'DM'  => '01', //Duplicata Mercantil
+        'NP'  => '02', //Nota Promissória
+        'NS'  => '03', //Nota de Seguro
+        'RC'  => '05', //Recibo
+        'LC'  => '10', //Letra de Câmbio
+        'ND'  => '11', //Nota de Débito
+        'DS'  => '12', //Duplicata de Serviço
+        'CC'  => '31', //CC Cartão de Crédito,
+        'BDP' => '32', //BDP - Boleto de Proposta
+        'O'   => '99', //Outros,
+    ];
+    /**
      * Mostrar o endereço do beneficiário abaixo da razão e CNPJ na ficha de compensação
      *
      * @var boolean
