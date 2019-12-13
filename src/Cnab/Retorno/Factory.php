@@ -2,7 +2,7 @@
 namespace Eduardokum\LaravelBoleto\Cnab\Retorno;
 
 use Eduardokum\LaravelBoleto\Contracts\Boleto\Boleto as BoletoContract;
-use Eduardokum\LaravelBoleto\Contracts\Cnab\Retorno;
+use Eduardokum\LaravelBoleto\Contracts\Cnab\Retorno as RetornoContract;
 use Eduardokum\LaravelBoleto\Util;
 
 class Factory
@@ -10,10 +10,10 @@ class Factory
     /**
      * @param $file
      *
-     * @return Retorno
+     * @return RetornoContract
      * @throws \Exception
      */
-    public static function make($file)
+    public static function make($file) : RetornoContract
     {
         if (!$file_content = Util::file2array($file)) {
             throw new \Exception("Arquivo: não existe");
