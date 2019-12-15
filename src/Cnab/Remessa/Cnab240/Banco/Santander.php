@@ -136,14 +136,12 @@ class Santander extends AbstractRemessa implements RemessaContract
         if ($boleto->getStatus() == $boleto::STATUS_CUSTOM) {
             $this->add(16, 17, sprintf('%2.02s', $boleto->getComando()));
         }
-        $this->add(18, 21, Util::formatCnab('9', $this->getAgencia(), 4));
-        $this->add(22, 22, Util::formatCnab('9', '', 1));
-        $this->add(23, 31, Util::formatCnab('9', $this->getConta(), 9));
-        $this->add(32, 32, $this->getContaDv() ?: CalculoDV::santanderContaCorrente($this->getAgencia(), $this->getConta()));
-        $this->add(33, 41, Util::formatCnab('9', $this->getConta(), 9));
-        $this->add(42, 42, $this->getContaDv() ?: CalculoDV::santanderContaCorrente($this->getAgencia(), $this->getConta()));
-        $this->add(43, 44, '');
-        $this->add(45, 57, Util::formatCnab('9', $boleto->getNossoNumero(), 13));
+        $this->add(18, 22, Util::formatCnab('9', $this->getAgencia(), 5));
+        $this->add(23, 23, Util::formatCnab('X', $this->getAgenciaDv(), 1));
+        $this->add(24, 35, Util::formatCnab('9', $this->getConta(), 12));
+        $this->add(36, 36, $this->getContaDv() ?: CalculoDV::santanderContaCorrente($this->getAgencia(), $this->getConta()));
+        $this->add(37, 37, '');
+        $this->add(38, 57, Util::formatCnab('9', $boleto->getNossoNumero(), 20));
         $this->add(58, 58, Util::formatCnab('9', $this->getCarteiraNumero() > 200 ? '1' : '5', 1));
         $this->add(59, 59, Util::formatCnab('9', 1, 1));
         $this->add(60, 60, Util::formatCnab('9', 2, 1));
@@ -152,8 +150,7 @@ class Santander extends AbstractRemessa implements RemessaContract
         $this->add(63, 77, Util::formatCnab('9', $boleto->getNumeroDocumento(), 15));
         $this->add(78, 85, $boleto->getDataVencimento()->format('dmY'));
         $this->add(86, 100, Util::formatCnab('9', $boleto->getValor(), 15, 2));
-        $this->add(101, 104, Util::formatCnab('9', 0, 4));
-        $this->add(105, 105, Util::formatCnab('9', 0, 1));
+        $this->add(101, 105, '');
         $this->add(106, 106, '');
         $this->add(107, 108, Util::formatCnab('9', $boleto->getEspecieDocCodigo('02', 240), 2));
         $this->add(109, 109, Util::formatCnab('9', 'N', 1));
@@ -173,8 +170,7 @@ class Santander extends AbstractRemessa implements RemessaContract
         }
         $this->add(222, 223, Util::formatCnab('9', $boleto->getDiasProtesto(), 2));
         $this->add(224, 224, $boleto->getDiasBaixaAutomatica() > 0 ? '1' : '3'); // 1 = Baixar/Devolver / 2 = Não Baixar / 3 = Perfil do Benefíciario (Configuração do Banco)
-        $this->add(225, 225, Util::formatCnab('9', 0, 1));  //Zero Fixo
-        $this->add(226, 227, Util::formatCnab('9', $boleto->getDiasBaixaAutomatica(), 2));  //Dias para Baixa
+        $this->add(225, 227, Util::formatCnab('9', $boleto->getDiasBaixaAutomatica(), 3));  //Dias para Baixa
         $this->add(228, 229, Util::formatCnab('9', 0, 2));  // 00 = Real
         $this->add(230, 240, '');
 
@@ -279,11 +275,15 @@ class Santander extends AbstractRemessa implements RemessaContract
         $this->add(1, 3, Util::onlyNumbers($this->getCodigoBanco()));
         $this->add(4, 7, '0000');
         $this->add(8, 8, '0');
-        $this->add(9, 16, '');
-        $this->add(17, 17, strlen(Util::onlyNumbers($this->getBeneficiario()->getDocumento())) == 14 ? '2' : '1');
-        $this->add(18, 32, Util::formatCnab('9', Util::onlyNumbers($this->getBeneficiario()->getDocumento()), 15));
-        $this->add(33, 47, Util::formatCnab('9', $this->getCodigoTransmissao(), 15));
-        $this->add(48, 72, '');
+        $this->add(9, 17, '');
+        $this->add(18, 18, strlen(Util::onlyNumbers($this->getBeneficiario()->getDocumento())) == 14 ? '2' : '1');
+        $this->add(19, 32, Util::formatCnab('9', Util::onlyNumbers($this->getBeneficiario()->getDocumento()), 14));
+        $this->add(33, 52, Util::formatCnab('9', Util::onlyNumbers($this->getCodigoCliente()), 20));
+        $this->add(53, 57, Util::formatCnab('9', $this->getAgencia(), 5));
+        $this->add(58, 58, Util::formatCnab('X', $this->getAgenciaDv(), 1));
+        $this->add(59, 70, Util::formatCnab('9', $this->getConta(), 12));
+        $this->add(71, 71, $this->getContaDv() ?: CalculoDV::santanderContaCorrente($this->getAgencia(), $this->getConta()));
+        $this->add(72, 72, '');
         $this->add(73, 102, Util::formatCnab('X', $this->getBeneficiario()->getNome(), 30));
         $this->add(103, 132, Util::formatCnab('X', 'Banco Santander', 30));
         $this->add(133, 142, '');
@@ -291,8 +291,7 @@ class Santander extends AbstractRemessa implements RemessaContract
         $this->add(144, 151, $this->getDataRemessa('dmY'));
         $this->add(152, 157, '');
         $this->add(158, 163, Util::formatCnab('9', $this->getIdremessa(), 6));
-        $this->add(164, 166, Util::formatCnab('9', '040', 3));
-        $this->add(164, 166, Util::formatCnab('9', '040', 3));
+        $this->add(164, 166, Util::formatCnab('9', '030', 3));
         $this->add(167, 240, '');
 
         return $this;
@@ -332,14 +331,17 @@ class Santander extends AbstractRemessa implements RemessaContract
         $this->add(17, 17, '');
         $this->add(18, 18, strlen(Util::onlyNumbers($this->getBeneficiario()->getDocumento())) == 14 ? '2' : '1');
         $this->add(19, 33, Util::formatCnab('9', Util::onlyNumbers($this->getBeneficiario()->getDocumento()), 15));
-        $this->add(34, 53, '');
-        $this->add(54, 68, Util::formatCnab('9', $this->getCodigoTransmissao(), 15));
-        $this->add(69, 73, '');
+        $this->add(34, 53, Util::formatCnab('9', Util::onlyNumbers($this->getCodigoCliente()), 20));
+        $this->add(54, 58, Util::formatCnab('9', $this->getAgencia(), 5));
+        $this->add(59, 59, Util::formatCnab('X', $this->getAgenciaDv(), 1));
+        $this->add(60, 71, Util::formatCnab('9', $this->getConta(), 12));
+        $this->add(72, 72, $this->getContaDv() ?: CalculoDV::santanderContaCorrente($this->getAgencia(), $this->getConta()));
+        $this->add(73, 73, '');
         $this->add(74, 103, Util::formatCnab('X', $this->getBeneficiario()->getNome(), 30));
         $this->add(104, 143, '');
         $this->add(144, 183, '');
-        $this->add(184, 191, Util::formatCnab('9', 0, 8));
-        $this->add(192, 199, date('dmY'));
+        $this->add(184, 191, Util::formatCnab('9', $this->getIdremessa(), 8));
+        $this->add(192, 199, $this->getDataRemessa('dmY'));
         $this->add(200, 240, '');
 
         return $this;
