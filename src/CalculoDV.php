@@ -21,7 +21,7 @@ class CalculoDV
 
     public static function bbNossoNumero($nossoNumero)
     {
-        return strlen($nossoNumero) >= 17 ? null : Util::modulo11($nossoNumero);
+        return strlen($nossoNumero) >= 17 ? null : Util::modulo11($nossoNumero, 2, 9, 0, 'X');
     }
 
     /*
